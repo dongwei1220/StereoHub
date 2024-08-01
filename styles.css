@@ -60,9 +60,21 @@ html, body {
   color: #ffffff;
   padding: 10px;
   padding-left: 20px;
-  position: fixed;
-  bottom: 0px;
+  /* position: fixed;
+  bottom: 0px; */
   width: 100%;
   margin: 0px;
-  font-size: 0.95em;
+  font-size: 0.80em;
+  line-height: 2em;
+}
+.footer_a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.footer_card {
+  margin: 0px;
+}
+
+.division {
+  margin: 10px;
 }
