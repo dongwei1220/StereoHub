@@ -4,6 +4,9 @@ from shiny import ui
 # Utils
 from faicons import icon_svg
 
+# Module
+import components.icons as icons
+
 
 def footer():
     return ui.row(
@@ -19,7 +22,7 @@ def footer():
             5,
             ui.row(
                 ui.a(
-                    icon_svg("copyright"),
+                    icons.copyright(),
                     " Copyright © StereoHub 2024",
                     href="https://github.com/StereoHub/",
                     target="_blank",
@@ -28,7 +31,7 @@ def footer():
             ),
             ui.row(
                 ui.a(
-                    icon_svg("github"),
+                    icons.github(),
                     " GitHub: https://github.com/StereoHub/",
                     href="https://github.com/StereoHub/",
                     target="_blank",
@@ -37,7 +40,7 @@ def footer():
             ),
             ui.row(
                 ui.a(
-                    icon_svg("envelope"),
+                    icons.email(),
                     " Email: benben.miao@outlook.com",
                     href="benben.miao@outlook.com",
                     target="_blank",
@@ -56,7 +59,7 @@ def footer():
             5,
             ui.row(
                 ui.a(
-                    icon_svg("dna"),
+                    icons.dna(),
                     " STomics: https://stomics.tech",
                     href="https://stomics.tech",
                     target="_blank",
@@ -65,7 +68,7 @@ def footer():
             ),
             ui.row(
                 ui.a(
-                    icon_svg("cloud"),
+                    icons.cloud(),
                     " STOmics Cloud: https://cloud.stomics.tech",
                     href="https://cloud.stomics.tech",
                     target="_blank",
@@ -75,7 +78,7 @@ def footer():
             ui.hr(class_="division"),
             ui.row(
                 ui.a(
-                    icon_svg("github"),
+                    icons.github(),
                     " OmicsSuite: https://github.com/OmicsSuite/",
                     href="https://github.com/OmicsSuite/",
                     target="_blank",
@@ -84,7 +87,7 @@ def footer():
             ),
             ui.row(
                 ui.a(
-                    icon_svg("microsoft"),
+                    icons.microsoft(),
                     " OmicsSuite: https://omicssuite.github.io",
                     href="https://omicssuite.github.io",
                     target="_blank",
@@ -94,7 +97,7 @@ def footer():
             ui.hr(class_="division"),
             ui.row(
                 ui.a(
-                    icon_svg("github"),
+                    icons.github(),
                     " TOmicsVis: https://github.com/benben-miao/TOmicsVis/",
                     href="https://github.com/benben-miao/TOmicsVis/",
                     target="_blank",
@@ -103,7 +106,7 @@ def footer():
             ),
             ui.row(
                 ui.a(
-                    icon_svg("r-project"),
+                    icons.r_project(),
                     " TOmicsVis: https://benben-miao.github.io/TOmicsVis/",
                     href="https://benben-miao.github.io/TOmicsVis/",
                     target="_blank",

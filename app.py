@@ -14,16 +14,20 @@ import seaborn as sns
 
 # Module
 from components.footer import footer
+import components.icons as icons
 from apps.home import home
 
 app_ui = ui.page_fluid(
-    ui.include_css(path=Path(__file__).parent / "styles.css"),
+    ui.include_css(path=Path(__file__).parent / "styles.css", method="link_files"),
+    # ui.include_css(
+    #     path=Path(__file__).parent / "assets/css/iconfont.css", method="link_files"
+    # ),
     ui.navset_pill(
         ui.nav_control(
             ui.a(
                 "StereoHub ",
                 ui.img(
-                    src="https://avatars.githubusercontent.com/u/177035861?s=200&v=4",
+                    src="/logo.png",
                     height="36px",
                     width="36px",
                 ),
@@ -38,25 +42,25 @@ app_ui = ui.page_fluid(
             home(),
             footer(),
             value="nav_home",
-            icon=icon_svg("house"),
+            icon=icons.home(),
         ),
         ui.nav_panel(
             " Analysis",
             "Analysis Content",
             footer(),
             value="nav_ana",
-            icon=icon_svg("layer-group"),
+            icon=icons.analysis(),
         ),
         ui.nav_panel(
             " Visualization",
             "Visualization Content",
             footer(),
             value="nav_vis",
-            icon=icon_svg("paint-roller"),
+            icon=icons.slides(),
         ),
         ui.nav_control(
             ui.a(
-                icon_svg("github"),
+                icons.github(),
                 " GitHub",
                 href="https://github.com/StereoHub/",
                 target="_blank",
@@ -66,19 +70,24 @@ app_ui = ui.page_fluid(
         ui.nav_menu(
             " About",
             ui.nav_panel(
-                " About", "About", footer(), value="nav_about", icon=icon_svg("star")
+                " About",
+                "About",
+                footer(),
+                value="nav_about",
+                icon=icons.github(),
             ),
             ui.nav_panel(
                 " Stereo-Seq",
                 "Stereo-Seq",
                 footer(),
                 value="nav_seq",
-                icon=icon_svg("rocket"),
+                icon=icons.dna(),
             ),
             "---",
             "Software:",
             ui.nav_control(
                 ui.a(
+                    icons.github(),
                     "OmicsSuite",
                     href="https://omicssuite.github.io/#/",
                     target="_blank",
@@ -86,12 +95,13 @@ app_ui = ui.page_fluid(
             ),
             ui.nav_control(
                 ui.a(
-                    "Shiny",
+                    icons.github(),
+                    "TOmicsVis",
                     href="https://benben-miao.github.io/TOmicsVis/",
                     target="_blank",
                 )
             ),
-            icon=icon_svg("compass"),
+            icon=icons.build(),
         ),
         id="navset",
         selected="nav_home",
@@ -112,4 +122,4 @@ def server(input: Inputs, output: Outputs, session: Session):
         return fig
 
 
-app = App(app_ui, server)
+app = App(app_ui, server, static_assets=Path(__file__).parent / "assets", debug=False)
