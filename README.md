@@ -24,8 +24,8 @@ conda activate stereohub
 
 ```bash
 python -m shiny run \
-  --port 61309 \
-  --reload --autoreload-port 61310 \
+  --port 5000 \
+  --reload \
   app.py
 ```
 

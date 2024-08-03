@@ -1,21 +1,28 @@
 # Shiny
 from shiny import App, Inputs, Outputs, Session, render, ui
 
-# Utils
-from pathlib import Path
-from faicons import icon_svg
-
 # Data
 import numpy as np
+import pandas as pd
+import stereo as st
+import json
 
 # Vis
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Utils
+from pathlib import Path
+from faicons import icon_svg
+import warnings
+
 # Module
 from components.footer import footer
 import components.icons as icons
-from apps.home import home
+from apps.spatial_slice import home
+
+# Setting
+warnings.filterwarnings("ignore")
 
 app_ui = ui.page_fluid(
     ui.include_css(path=Path(__file__).parent / "styles.css", method="link_files"),
@@ -39,24 +46,24 @@ app_ui = ui.page_fluid(
         # ui.nav_spacer(),
         ui.nav_panel(
             " Home",
-            home(),
+            "Home",
             footer(),
             value="nav_home",
             icon=icons.home(),
         ),
         ui.nav_panel(
-            " Analysis",
-            "Analysis Content",
+            " Spatial Slice",
+            home(),
             footer(),
             value="nav_ana",
-            icon=icons.analysis(),
+            icon=icons.brain(),
         ),
         ui.nav_panel(
-            " Visualization",
+            " Spatio-Temporal Slices",
             "Visualization Content",
             footer(),
             value="nav_vis",
-            icon=icons.slides(),
+            icon=icons.time(),
         ),
         ui.nav_control(
             ui.a(
@@ -112,14 +119,47 @@ app_ui = ui.page_fluid(
 
 
 def server(input: Inputs, output: Outputs, session: Session):
-    @render.plot(alt="A histogram")
-    def plot() -> object:
-        np.random.seed(19680801)
-        x = 100 + 15 * np.random.randn(437)
+    @render.table()
+    def gef_info():
+        data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
+        gef_info_dict = st.io.read_gef_info(data_path)
+        gef_info_df = pd.DataFrame(gef_info_dict, index=[0])
+        return gef_info_df.style.set_table_attributes(
+            'class="dataframe shiny-table table"'
+        )
 
-        fig, ax = plt.subplots()
-        ax.hist(x, input.n(), density=True)
-        return fig
+    def sed_info():
+        data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
+        sed = st.io.read_gef(file_path=data_path, bin_type="cell_bins")
+        return sed
+
+    @render.text()
+    def sed_cells_genes():
+        return sed_info().shape
+
+    @render.text()
+    def sed_bin_type():
+        return sed_info().bin_type
+
+    @render.text()
+    def sed_bin_size():
+        return sed_info().bin_size
+
+    @render.text()
+    def sed_cell_attrs():
+        return sed_info().cells
+
+    @render.text()
+    def sed_cell_names():
+        return sed_info().cell_names
+
+    @render.text()
+    def sed_gene_attrs():
+        return sed_info().genes
+
+    @render.text()
+    def sed_gene_names():
+        return sed_info().gene_names
 
 
 app = App(app_ui, server, static_assets=Path(__file__).parent / "assets", debug=False)
