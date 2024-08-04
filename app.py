@@ -1,15 +1,17 @@
 # Shiny
 from shiny import App, Inputs, Outputs, Session, render, ui
+from shiny.types import ImgData
+from shinywidgets import render_widget, render_bokeh
+from IPython.display import display
+from ipywidgets import IntSlider
 
 # Data
+import stereo as st
 import numpy as np
 import pandas as pd
-import stereo as st
-import json
 
 # Vis
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Utils
 from pathlib import Path
@@ -55,14 +57,14 @@ app_ui = ui.page_fluid(
             " Spatial Slice",
             home(),
             footer(),
-            value="nav_ana",
+            value="nav_spatial",
             icon=icons.brain(),
         ),
         ui.nav_panel(
             " Spatio-Temporal Slices",
             "Visualization Content",
             footer(),
-            value="nav_vis",
+            value="nav_temporal",
             icon=icons.time(),
         ),
         ui.nav_control(
@@ -129,7 +131,8 @@ def server(input: Inputs, output: Outputs, session: Session):
         )
 
     def sed_info():
-        data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
+        # data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
+        data_path = input.gef_path()
         sed = st.io.read_gef(file_path=data_path, bin_type="cell_bins")
         return sed
 
@@ -160,6 +163,28 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.text()
     def sed_gene_names():
         return sed_info().gene_names
+
+    @render.image
+    def qc_violin():
+        sed = sed_info()
+        sed.tl.cal_qc()
+        sed.plt.violin()
+        pc = st.plots.PlotCollection(sed)
+        pc.violin(out_path="./temp/qc_violin.png", out_dpi=input.image_dpi())
+        pc.violin(out_path="./temp/qc_violin.pdf", out_dpi=input.image_dpi())
+        dir = Path(__file__).parent
+        img: ImgData = {"src": str(dir / "temp/qc_violin.png"), "width": "80%"}
+        return img
+
+    @render.download()
+    def qc_violin_dl_pdf():
+        path = Path(__file__).parent / "temp/qc_violin.pdf"
+        return str(path)
+
+    @render.download()
+    def qc_violin_dl_png():
+        path = Path(__file__).parent / "temp/qc_violin.png"
+        return str(path)
 
 
 app = App(app_ui, server, static_assets=Path(__file__).parent / "assets", debug=False)

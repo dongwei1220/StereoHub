@@ -24,9 +24,20 @@ conda activate stereohub
 
 ```bash
 python -m shiny run \
+  --host 127.0.0.1 \
   --port 5000 \
   --reload \
+  --reload-includes "*.py,*.css,*.js,*.html" \
+  --reload-excludes "*.png,*.pdf" \
+  --log-level info \
+  --app-dir "." \
+  --launch-browser \
+  --dev-mode \
   app.py
+```
+
+```bash
+python -m shiny run --port 5000 --reload --reload-excludes "*.png,*.pdf" --launch-browser --dev-mode app.py
 ```
 
 ## 3.3 Contribution
