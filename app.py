@@ -133,7 +133,16 @@ def server(input: Inputs, output: Outputs, session: Session):
     def sed_info():
         # data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
         data_path = input.gef_path()
-        sed = st.io.read_gef(file_path=data_path, bin_type="cell_bins")
+        sed = st.io.read_gef(
+            file_path=data_path,
+            bin_type=input.bin_type(),  # "bins" or "cell_bins"
+            bin_size=input.bin_size(),
+            is_sparse=True,
+            gene_list=None,
+            region=None,
+            gene_name_index=None,
+            num_threads=input.num_threads(),
+        )
         return sed
 
     @render.text()
@@ -170,10 +179,42 @@ def server(input: Inputs, output: Outputs, session: Session):
         sed.tl.cal_qc()
         sed.plt.violin()
         pc = st.plots.PlotCollection(sed)
-        pc.violin(out_path="./temp/qc_violin.png", out_dpi=input.image_dpi())
-        pc.violin(out_path="./temp/qc_violin.pdf", out_dpi=input.image_dpi())
-        dir = Path(__file__).parent
-        img: ImgData = {"src": str(dir / "temp/qc_violin.png"), "width": "80%"}
+        pc.violin(
+            out_path="./temp/qc_violin.png",
+            out_dpi=input.image_dpi(),
+            show_stripplot=False,
+            jitter=0.20,
+            dot_size=input.violin_dot_size(),
+            log=False,
+            rotation_angle=input.violin_x_angle(),
+            group_by=None,
+            multi_panel=input.violin_multi_panel(),
+            scale="width",  # "area", "count", "width"
+            ax=None,
+            order=None,
+            use_raw=False,
+            palette=input.palette(),  # Discrete: "tab10", "hls", "husl", "Set2", "Paired", Rainbow: "rocket", "mako", "flare", "crest", "magma", "viridis", "cubehelix", "Blues", "YlOrBr", "vlag", "icefire", "Spectral", "coolwarm"
+            title=None,
+        )
+        pc.violin(
+            out_path="./temp/qc_violin.pdf",
+            out_dpi=input.image_dpi(),
+            show_stripplot=False,
+            jitter=0.20,
+            dot_size=input.violin_dot_size(),
+            log=False,
+            rotation_angle=input.violin_x_angle(),
+            group_by=None,
+            multi_panel=input.violin_multi_panel(),
+            scale="width",  # "area", "count", "width"
+            ax=None,
+            order=None,
+            use_raw=False,
+            palette=input.palette(),  # Discrete: "tab10", "hls", "husl", "Set2", "Paired", Rainbow: "rocket", "mako", "flare", "crest", "magma", "viridis", "cubehelix", "Blues", "YlOrBr", "vlag", "icefire", "Spectral", "coolwarm"
+            title=None,
+        )
+        dir_path = Path(__file__).parent
+        img: ImgData = {"src": str(dir_path / "temp/qc_violin.png"), "width": "100%"}
         return img
 
     @render.download()

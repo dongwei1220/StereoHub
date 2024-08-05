@@ -50,6 +50,10 @@ git commit -m "your message"
 git push
 ```
 
+## 3.4 Deploy: Shinylive (WebAssembly + Pyodide)
+
+## 3.5 Deploy: Self Host
+
 # 4. References
 
 - [**Shiny**: https://shiny.posit.co/py/](https://shiny.posit.co/py/)
