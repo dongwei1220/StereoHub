@@ -47,7 +47,7 @@ def footer():
                     class_="footer_a",
                 ),
             ),
-            ui.hr(class_="division"),
+            ui.hr(),
             ui.row(
                 ui.card(
                     "StereoHub is dedicated to developing downstream open-source analysis and visualization software based on Stereo-Seq spatiotemics technology, and provides free cloud computing services.",
@@ -75,7 +75,7 @@ def footer():
                     class_="footer_a",
                 ),
             ),
-            ui.hr(class_="division"),
+            ui.hr(),
             ui.row(
                 ui.a(
                     icons.github(),
@@ -94,7 +94,7 @@ def footer():
                     class_="footer_a",
                 ),
             ),
-            ui.hr(class_="division"),
+            ui.hr(),
             ui.row(
                 ui.a(
                     icons.github(),

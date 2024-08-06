@@ -4,25 +4,16 @@ body {
   margin: 0px;
   padding: 0px;
 }
-.division {
-  margin: 10px;
+hr {
+  margin: 5px !important;
+}
+h3 {
+  font-weight: bold !important;
 }
 
 /* 1. Header */
-.nav {
-  background-color: #008888ee;
-  height: 50px;
-}
-.nav-link {
-  height: 50px;
-  color: #ffffff !important;
-  font-weight: bold !important;
-  border-radius: 10px !important;
-  transform: scale(0.9);
-  transform-origin: center;
-}
-.nav-link.active {
-  background-color: #ff000011 !important;
+.nav-item {
+  padding: 0px 20px;
 }
 .dropdown-menu.show {
   background-color: #008888ee;
@@ -37,6 +28,7 @@ body {
 .dropdown-menu > li > a:hover {
   color: #000000 !important;
 }
+
 .dropdown-item {
   color: #ffffff !important;
   font-weight: bold !important;
@@ -46,6 +38,10 @@ body {
 }
 .dropdown-item.active {
   background-color: #ff000011 !important;
+}
+
+.dropdown-header {
+  color: #ffffff !important;
 }
 
 .name {
@@ -59,27 +55,37 @@ body {
 .container-fluid {
   padding: 0px;
 }
-.bslib-sidebar-layout {
-  margin: 0px !important;
-  border-radius: 10px;
-  height: 880px;
-}
 .well {
-  padding: 0px;
+  background-color: #008888;
+  padding: 5px;
 }
-.col-sm-4 {
-  width: 15%;
+.nav-pills > li > a {
+  color: #eeeeee !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
 }
-.col-sm-8 {
-  width: 85%;
-  padding: 0px;
+.nav-pills > li > a.active {
+  color: #ffffff !important;
+  font-weight: bold !important;
+  background-color: #ffffff55 !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
 }
 .button_primary {
-  background-color: #008888;
+  background-color: #0088aa;
   color: #ffffff;
+  border: solid 2px #0088aa;
   border-radius: 50px;
-  font-size: 0.90em;
+  font-size: 0.9em;
   font-weight: bold;
+}
+.card-body {
+  text-align: justify;
+}
+.image-shadow {
+  border-radius: 10px;
+  border: solid 1px #eeeeee;
+  box-shadow: 0px 0px 10px #eeeeee;
 }
 
 /* 3. Footer */

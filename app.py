@@ -21,7 +21,16 @@ import warnings
 # Module
 from components.footer import footer
 import components.icons as icons
-from apps.spatial_slice import home
+from apps.home import home
+from apps.about import about
+from apps.readme import readme
+from apps.stereo_seq import stereo_seq
+from apps.image_studio import image_studio
+from apps.saw_docs import saw_docs
+from apps.stereo_map import stereo_map
+from apps.stereopy import stereopy
+from apps.spatial_slice import spatial_slice
+from apps.spatio_temporal import spatio_temporal
 
 # Setting
 warnings.filterwarnings("ignore")
@@ -31,7 +40,7 @@ app_ui = ui.page_fluid(
     # ui.include_css(
     #     path=Path(__file__).parent / "assets/css/iconfont.css", method="link_files"
     # ),
-    ui.navset_pill(
+    ui.navset_bar(
         ui.nav_control(
             ui.a(
                 "StereoHub ",
@@ -45,27 +54,99 @@ app_ui = ui.page_fluid(
                 class_="name",
             )
         ),
-        # ui.nav_spacer(),
         ui.nav_panel(
             " Home",
-            "Home",
-            footer(),
+            home(),
             value="nav_home",
             icon=icons.home(),
         ),
         ui.nav_panel(
             " Spatial Slice",
-            home(),
-            footer(),
+            spatial_slice(),
             value="nav_spatial",
             icon=icons.brain(),
         ),
         ui.nav_panel(
             " Spatio-Temporal Slices",
-            "Visualization Content",
-            footer(),
+            spatio_temporal(),
             value="nav_temporal",
             icon=icons.time(),
+        ),
+        ui.nav_panel(
+            " About",
+            about(),
+            value="nav_about",
+            icon=icons.build(),
+        ),
+        ui.nav_menu(
+            " Documents",
+            ui.nav_panel(
+                " Documents",
+                readme(),
+                value="nav_docs",
+                icon=icons.book(),
+            ),
+            "---",
+            "Stereo Docs:",
+            ui.nav_panel(
+                " Stereo-Seq",
+                stereo_seq(),
+                value="nav_seq",
+                icon=icons.dna(),
+            ),
+            ui.nav_panel(
+                " ImageStudio",
+                image_studio(),
+                value="nav_image_studio",
+                icon=icons.microsoft(),
+            ),
+            ui.nav_panel(
+                " SAW Docs",
+                saw_docs(),
+                value="nav_saw",
+                icon=icons.terminal(),
+            ),
+            ui.nav_panel(
+                " StereoMap",
+                stereo_map(),
+                value="nav_stereo_map",
+                icon=icons.microsoft(),
+            ),
+            ui.nav_panel(
+                " Stereopy",
+                stereopy(),
+                value="nav_stereopy",
+                icon=icons.python(),
+            ),
+            icon=icons.book(),
+        ),
+        ui.nav_menu(
+            "Our Works:",
+            ui.nav_control(
+                ui.a(
+                    icons.cloud(),
+                    " Hiplot Pro",
+                    href="https://hiplot.com.cn",
+                    target="_blank",
+                )
+            ),
+            ui.nav_control(
+                ui.a(
+                    icons.microsoft(),
+                    " OmicsSuite",
+                    href="https://omicssuite.github.io/#/",
+                    target="_blank",
+                )
+            ),
+            ui.nav_control(
+                ui.a(
+                    icons.r_project(),
+                    " TOmicsVis",
+                    href="https://benben-miao.github.io/TOmicsVis/",
+                    target="_blank",
+                )
+            ),
+            icon=icons.analysis(),
         ),
         ui.nav_control(
             ui.a(
@@ -73,49 +154,24 @@ app_ui = ui.page_fluid(
                 " GitHub",
                 href="https://github.com/StereoHub/",
                 target="_blank",
-                class_="name",
             )
         ),
-        ui.nav_menu(
-            " About",
-            ui.nav_panel(
-                " About",
-                "About",
-                footer(),
-                value="nav_about",
-                icon=icons.github(),
-            ),
-            ui.nav_panel(
-                " Stereo-Seq",
-                "Stereo-Seq",
-                footer(),
-                value="nav_seq",
-                icon=icons.dna(),
-            ),
-            "---",
-            "Software:",
-            ui.nav_control(
-                ui.a(
-                    icons.github(),
-                    "OmicsSuite",
-                    href="https://omicssuite.github.io/#/",
-                    target="_blank",
-                )
-            ),
-            ui.nav_control(
-                ui.a(
-                    icons.github(),
-                    "TOmicsVis",
-                    href="https://benben-miao.github.io/TOmicsVis/",
-                    target="_blank",
-                )
-            ),
-            icon=icons.build(),
-        ),
+        ui.nav_spacer(),
+        title="",
         id="navset",
         selected="nav_home",
+        sidebar=None,
+        fillable=True,
+        gap=None,
+        padding="70px 0px 0px 0px",
+        position="fixed-top",
         header=None,
-        footer=None,
+        footer=footer(),
+        bg="#008888ee",
+        inverse=True,
+        underline=True,
+        collapsible=True,
+        fluid=True,
     ),
 )
 
@@ -226,6 +282,22 @@ def server(input: Inputs, output: Outputs, session: Session):
     def qc_violin_dl_png():
         path = Path(__file__).parent / "temp/qc_violin.png"
         return str(path)
+
+    @render.ui()
+    def version_update():
+        markdown_path_str = "./assets/markdown/version_update.md"
+        with open(markdown_path_str, "r", encoding="utf-8") as file:
+            content = file.read()
+        ui_markdown = ui.markdown(content)
+        return ui_markdown
+
+    @render.ui()
+    def readme():
+        markdown_path_str = "./README.md"
+        with open(markdown_path_str, "r", encoding="utf-8") as file:
+            content = file.read()
+        ui_markdown = ui.markdown(content)
+        return ui_markdown
 
 
 app = App(app_ui, server, static_assets=Path(__file__).parent / "assets", debug=False)

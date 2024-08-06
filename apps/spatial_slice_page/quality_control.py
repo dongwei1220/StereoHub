@@ -75,7 +75,7 @@ def quality_control():
                     width=None,
                     size=None,
                 ),
-                ui.tags.hr(class_="division"),
+                ui.tags.hr(),
                 ui.input_slider(
                     id="image_dpi",
                     label=ui.tags.b("5. Image DPI:"),
