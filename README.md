@@ -41,9 +41,32 @@
 ### 3.1 Install
 
 ```bash
+# 1. git clone repository
 git clone git@github.com:StereoHub/StereoHub.git
 cd StereoHub
 
+# 2. Install Environment
+# 2.1 For Windows
+.\env-win.bat
+
+# 2.2 For Linux
+bash env-linux.sh
+
+# 2.3 Install Steps
+# 2.3.1 Mamba Env Create and Activate
+mamba create -n stereohub python=3.8
+mamba activate stereohub
+
+# 2.3.2 Shiny
+mamba install -c conda-forge shiny=1.0.0 shinywidgets=0.3.2 IPython=8.12.2 ipywidgets=8.1.3
+
+# 2.3.3 Utils
+mamba install -c conda-forge numpy=1.23.5 pandas=1.5.3 matplotlib=3.7.1 faicons=0.2.2
+
+# 2.3.4 Stereopy
+mamba install stereopy=1.3.1 -c stereopy -c grst -c numba -c conda-forge -c bioconda -c fastai -c defaults
+
+# 2.4 Conda Env Export and Create
 conda env create -f stereohub.yml
 conda activate stereohub
 ```
@@ -57,12 +80,12 @@ conda activate stereohub
 # 2. For Linux
 bash start-linux.sh
 
-# 3. All terminals
+# 3. All Terminals
 python -m shiny run \
   --host 127.0.0.1 \
   --port 5000 \
   --reload \
-  --reload-includes "*.py,*.css,*.js,*.html" \
+  --reload-includes "*.py,*.css,*.js,*.html,*.md" \
   --reload-excludes "*.png,*.pdf" \
   --log-level info \
   --app-dir "." \
@@ -71,17 +94,7 @@ python -m shiny run \
   app.py
 ```
 
-### 3.3 Contribution
-
-```bash
-git pull
-
-git add .
-git commit -m "your message"
-git push
-```
-
-### 3.4 Deploy: Shinylive (WebAssembly + Pyodide)
+### 3.3 Deploy: Shinylive (WebAssembly + Pyodide)
 - [**Shinylive: Shiny + WebAssembly**: https://shiny.posit.co/py/docs/shinylive.html](https://shiny.posit.co/py/docs/shinylive.html)
 
 ```bash
@@ -92,8 +105,28 @@ shinylive export myapp site
 python3 -m http.server --directory site 8008
 ```
 
-### 3.5 Deploy: Self Host
+### 3.4 Deploy: Self Host
 - [**Self-hosted deployments**: https://shiny.posit.co/py/docs/deploy-on-prem.html](https://shiny.posit.co/py/docs/deploy-on-prem.html)
+
+```python
+if __name__ == "__main__":
+    run_app(
+        app="app",
+        host="0.0.0.0",
+        port=5000,
+        autoreload_port=0,
+        reload=True,
+        reload_dirs=None,
+        reload_includes="*.py,*.css,*.js,*.html,*.md",
+        reload_excludes="*.png,*.pdf",
+        ws_max_size=16777216,
+        log_level=None,
+        app_dir=".",
+        factory=False,
+        launch_browser=False,
+        dev_mode=False,
+    )
+```
 
 ```yml
 # Use system python3 to run Shiny apps
@@ -124,5 +157,4 @@ server {
 
 ## 4. References
 
-- [**Shiny**: https://shiny.posit.co/py/](https://shiny.posit.co/py/)
-- [**Stereopy**: https://stereopy.readthedocs.io/en/latest/](https://stereopy.readthedocs.io/en/latest/)
+> Ao Chen, Sha Liao, Mengnan Cheng, Longqi Liu, Xun Xu, Jian Wang. **Spatiotemporal transcriptomic atlas of mouse organogenesis using DNA nanoball-patterned arrays.** ***Cell***, 2022, doi: **https://doi.org/10.1016/j.cell.2022.04.003**

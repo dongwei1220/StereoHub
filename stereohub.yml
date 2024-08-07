@@ -1,4 +1,4 @@
-name: stereohub
+name: stereohub3
 channels:
   - fastai
   - numba

@@ -1,5 +1,5 @@
 # Shiny
-from shiny import App, Inputs, Outputs, Session, render, ui
+from shiny import App, Inputs, Outputs, Session, render, ui, run_app
 from shiny.types import ImgData
 from shinywidgets import render_widget, render_bokeh
 from IPython.display import display
@@ -14,6 +14,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Utils
+import os
+import tempfile
 from pathlib import Path
 from faicons import icon_svg
 import warnings
@@ -36,10 +38,9 @@ from apps.spatio_temporal import spatio_temporal
 warnings.filterwarnings("ignore")
 
 app_ui = ui.page_fluid(
-    ui.include_css(path=Path(__file__).parent / "styles.css", method="link_files"),
-    # ui.include_css(
-    #     path=Path(__file__).parent / "assets/css/iconfont.css", method="link_files"
-    # ),
+    ui.include_css(
+        path=Path(__file__).parent.resolve() / "styles.css", method="link_files"
+    ),
     ui.navset_bar(
         ui.nav_control(
             ui.a(
@@ -179,18 +180,15 @@ app_ui = ui.page_fluid(
 def server(input: Inputs, output: Outputs, session: Session):
     @render.table()
     def gef_info():
-        data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
-        gef_info_dict = st.io.read_gef_info(data_path)
+        gef_info_dict = st.io.read_gef_info(input.gef_path())
         gef_info_df = pd.DataFrame(gef_info_dict, index=[0])
         return gef_info_df.style.set_table_attributes(
             'class="dataframe shiny-table table"'
         )
 
     def sed_info():
-        # data_path = str(Path(__file__).parent / "data/SS200000135TL_D1.cellbin.gef")
-        data_path = input.gef_path()
         sed = st.io.read_gef(
-            file_path=data_path,
+            file_path=input.gef_path(),
             bin_type=input.bin_type(),  # "bins" or "cell_bins"
             bin_size=input.bin_size(),
             is_sparse=True,
@@ -228,6 +226,10 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.text()
     def sed_gene_names():
         return sed_info().gene_names
+    
+    temp_dir = tempfile.gettempdir()
+    stereo_temp = os.path.join(temp_dir, "stereohub")
+    os.makedirs(stereo_temp, exist_ok=True)
 
     @render.image
     def qc_violin():
@@ -236,7 +238,7 @@ def server(input: Inputs, output: Outputs, session: Session):
         sed.plt.violin()
         pc = st.plots.PlotCollection(sed)
         pc.violin(
-            out_path="./temp/qc_violin.png",
+            out_path=os.path.join(stereo_temp, "qc_violin.png"),
             out_dpi=input.image_dpi(),
             show_stripplot=False,
             jitter=0.20,
@@ -253,7 +255,7 @@ def server(input: Inputs, output: Outputs, session: Session):
             title=None,
         )
         pc.violin(
-            out_path="./temp/qc_violin.pdf",
+            out_path=os.path.join(stereo_temp, "qc_violin.pdf"),
             out_dpi=input.image_dpi(),
             show_stripplot=False,
             jitter=0.20,
@@ -269,35 +271,57 @@ def server(input: Inputs, output: Outputs, session: Session):
             palette=input.palette(),  # Discrete: "tab10", "hls", "husl", "Set2", "Paired", Rainbow: "rocket", "mako", "flare", "crest", "magma", "viridis", "cubehelix", "Blues", "YlOrBr", "vlag", "icefire", "Spectral", "coolwarm"
             title=None,
         )
-        dir_path = Path(__file__).parent
-        img: ImgData = {"src": str(dir_path / "temp/qc_violin.png"), "width": "100%"}
+        img: ImgData = {"src": os.path.join(stereo_temp, "qc_violin.png"), "width": "100%"}
         return img
 
     @render.download()
     def qc_violin_dl_pdf():
-        path = Path(__file__).parent / "temp/qc_violin.pdf"
-        return str(path)
+        path = os.path.join(stereo_temp, "qc_violin.pdf")
+        return path
 
     @render.download()
     def qc_violin_dl_png():
-        path = Path(__file__).parent / "temp/qc_violin.png"
-        return str(path)
+        path = os.path.join(stereo_temp, "qc_violin.png")
+        return path
 
     @render.ui()
     def version_update():
-        markdown_path_str = "./assets/markdown/version_update.md"
-        with open(markdown_path_str, "r", encoding="utf-8") as file:
+        markdown_path = "./assets/markdown/version_update.md"
+        with open(markdown_path, "r", encoding="utf-8") as file:
             content = file.read()
         ui_markdown = ui.markdown(content)
         return ui_markdown
 
     @render.ui()
     def readme():
-        markdown_path_str = "./README.md"
-        with open(markdown_path_str, "r", encoding="utf-8") as file:
+        markdown_path = "./README.md"
+        with open(markdown_path, "r", encoding="utf-8") as file:
             content = file.read()
         ui_markdown = ui.markdown(content)
         return ui_markdown
 
 
-app = App(app_ui, server, static_assets=Path(__file__).parent / "assets", debug=False)
+app = App(
+    app_ui,
+    server,
+    static_assets=Path(__file__).parent.resolve() / "assets",
+    debug=False,
+)
+
+# if __name__ == "__main__":
+#     run_app(
+#         app="app",
+#         host="0.0.0.0",
+#         port=5000,
+#         autoreload_port=0,
+#         reload=True,
+#         reload_dirs=None,
+#         reload_includes="*.py,*.css,*.js,*.html,*.md",
+#         reload_excludes="*.png,*.pdf",
+#         ws_max_size=16777216,
+#         log_level=None,
+#         app_dir=".",
+#         factory=False,
+#         launch_browser=False,
+#         dev_mode=False,
+#     )
