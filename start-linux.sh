@@ -1,7 +1,7 @@
 #!/bin/bash
 
 python -m shiny run \
-  --host 127.0.0.1 \
+  --host 0.0.0.0 \
   --port 5000 \
   --reload \
   --reload-includes "*.py,*.css,*.js,*.html,*.md" \
