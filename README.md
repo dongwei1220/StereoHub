@@ -34,7 +34,7 @@
 
 ### 2.1 StereoHub Cloud `Come soon`
 
-[StereoHub Cloud: https://stereohub.github.io/stereohub/](https://stereohub.github.io/stereohub/)
+[**StereoHub Cloud: https://hiplot.com.cn/stereohub/**](https://hiplot.com.cn/stereohub/)
 
 ## 3. For Developer
 
@@ -42,7 +42,7 @@
 
 ```bash
 # 1. git clone repository
-git clone git@github.com:StereoHub/StereoHub.git
+git clone https://github.com/StereoHub/StereoHub.git
 cd StereoHub
 
 # 2. Install Environment
@@ -95,41 +95,36 @@ python -m shiny run \
 ```
 
 ### 3.3 Deploy: Shinylive (WebAssembly + Pyodide)
-- [**Shinylive: Shiny + WebAssembly**: https://shiny.posit.co/py/docs/shinylive.html](https://shiny.posit.co/py/docs/shinylive.html)
+[**Shinylive: Shiny + WebAssembly**: https://shiny.posit.co/py/docs/shinylive.html](https://shiny.posit.co/py/docs/shinylive.html)
 
 ```bash
 shiny create myapp
 
 pip install shinylive
 shinylive export myapp site
-python3 -m http.server --directory site 8008
+python3 -m http.server --directory site 5000
 ```
 
 ### 3.4 Deploy: Self Host
-- [**Self-hosted deployments**: https://shiny.posit.co/py/docs/deploy-on-prem.html](https://shiny.posit.co/py/docs/deploy-on-prem.html)
+[**Self-hosted deployments**: https://shiny.posit.co/py/docs/deploy-on-prem.html](https://shiny.posit.co/py/docs/deploy-on-prem.html)
 
-```python
-if __name__ == "__main__":
-    run_app(
-        app="app",
-        host="0.0.0.0",
-        port=5000,
-        autoreload_port=0,
-        reload=True,
-        reload_dirs=None,
-        reload_includes="*.py,*.css,*.js,*.html,*.md",
-        reload_excludes="*.png,*.pdf",
-        ws_max_size=16777216,
-        log_level=None,
-        app_dir=".",
-        factory=False,
-        launch_browser=False,
-        dev_mode=False,
-    )
-```
+```bash
+# 1. shiny-server
+wget https://download3.rstudio.org/centos7/x86_64/shiny-server-1.5.22.1017-x86_64.rpm
+sudo rpm -ivh shiny-server-1.5.22.1017-x86_64.rpm
 
-```yml
-python /usr/bin/python3;
+# 2. stereohub environment
+bash env-linux.sh
+
+# 3. shiny-server home
+cd /srv/shiny-server/
+git clone https://github.com/StereoHub/StereoHub.git
+
+# 4. shiny-server config
+sudo vim /etc/shiny-server/shiny-server.conf
+
+python /cluster/envs/miniconda3/envs/stereohub/bin/python;
+
 run_as shiny;
 
 server {
@@ -147,6 +142,11 @@ server {
     directory_index on;
   }
 }
+
+# 5. shiny-server manage
+sudo systemctl start shiny-server
+sudo systemctl status shiny-server
+sudo systemctl restart shiny-server
 ```
 
 ## 4. References
