@@ -23,7 +23,7 @@ def home():
                     """
                 ),
                 ui.img(
-                    src="/image/StereoHub-UI.jpg",
+                    src="./image/StereoHub-UI.jpg",
                     width="100%",
                     class_="image-shadow"
                 ),
@@ -105,7 +105,7 @@ def home():
                     """
                 ),
                 ui.img(
-                    src="/image/stereo-seq-paper-1.jpg",
+                    src="./image/stereo-seq-paper-1.jpg",
                     width="100%",
                     class_="image-shadow"
                 ),
@@ -115,7 +115,7 @@ def home():
                     """
                 ),
                 ui.img(
-                    src="/image/stereo-seq-paper-2.jpg",
+                    src="./image/stereo-seq-paper-2.jpg",
                     width="100%",
                     class_="image-shadow"
                 ),
@@ -125,7 +125,7 @@ def home():
                     """
                 ),
                 ui.img(
-                    src="/image/stereo-seq-paper-3.jpg",
+                    src="./image/stereo-seq-paper-3.jpg",
                     width="100%",
                     class_="image-shadow"
                 ),

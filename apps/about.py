@@ -23,7 +23,7 @@ def about():
                     """
                 ),
                 ui.img(
-                    src="/image/StereoHub-UI.jpg",
+                    src="./image/StereoHub-UI.jpg",
                     width="100%",
                     class_="image-shadow"
                 ),

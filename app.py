@@ -46,7 +46,7 @@ app_ui = ui.page_fluid(
             ui.a(
                 "StereoHub ",
                 ui.img(
-                    src="/logo.png",
+                    src="./logo.png",
                     height="36px",
                     width="36px",
                 ),

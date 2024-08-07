@@ -11,7 +11,7 @@ import components.icons as icons
 def stereo_seq():
     return ui.layout_columns(
         ui.card(
-            ui.tags.iframe(src="/pdf/Stereo-Seq.pdf", frameborder="0").add_style(
+            ui.tags.iframe(src="./pdf/Stereo-Seq.pdf", frameborder="0").add_style(
                 "width: 100%; height: 800px;"
             ),
             full_screen=True,
